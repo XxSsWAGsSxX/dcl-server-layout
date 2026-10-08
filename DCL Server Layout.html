@@ -1,0 +1,425 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>DCL Server Layout</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: one calm reading column, sticky section nav, every table in its own scroll box.
+   Access matrix icons are drawn with CSS shapes so they never depend on emoji fonts. */
+:root {
+  --bg: #f4f6fa;
+  --surface: #ffffff;
+  --stripe: #f6f8fc;
+  --ink: #171c28;
+  --muted: #586174;
+  --line: #dce1ea;
+  --head: #1b2233;
+  --head-ink: #f2f4f9;
+  --accent: #9a6b06;
+  --accent-line: #c99a2e;
+  --accent-bg: #f7eed4;
+  --code-bg: #edf0f6;
+  --code-ink: #8a4a06;
+  --post: #1f8a4c;
+  --read: #2f6fdb;
+  --btn: #c47a0a;
+  --hide: #9aa3b2;
+  --font-display: "Barlow Condensed", "Arial Narrow", "Helvetica Neue", sans-serif;
+  --font-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0e121b; --surface: #151b27; --stripe: #192131; --ink: #e8ebf2; --muted: #9aa4b6;
+    --line: #273044; --head: #232d42; --head-ink: #f2f4f9; --accent: #e2b24c; --accent-line: #b8892a;
+    --accent-bg: #2a2414; --code-bg: #1e2635; --code-ink: #f0c27a; --post: #3cc27a; --read: #6aa0ff;
+    --btn: #e0a23a; --hide: #5d687c; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0e121b; --surface: #151b27; --stripe: #192131; --ink: #e8ebf2; --muted: #9aa4b6;
+  --line: #273044; --head: #232d42; --head-ink: #f2f4f9; --accent: #e2b24c; --accent-line: #b8892a;
+  --accent-bg: #2a2414; --code-bg: #1e2635; --code-ink: #f0c27a; --post: #3cc27a; --read: #6aa0ff;
+  --btn: #e0a23a; --hide: #5d687c; color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 15px; line-height: 1.6; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+.page { max-width: 1040px; margin-inline: auto; padding-inline: 16px; padding-block: 28px 72px; }
+
+/* header */
+.hero { padding-block: 8px 20px; border-bottom: 2px solid var(--accent-line); margin-bottom: 18px; }
+.hero h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(2.4rem, 8vw, 3.8rem); letter-spacing: 0.06em; text-transform: uppercase; line-height: 1; margin: 0 0 8px; text-wrap: balance; }
+.hero .sub { font-family: var(--font-display); font-weight: 600; font-size: 1.35rem; letter-spacing: 0.04em; color: var(--accent); margin: 0; }
+.hero .tag { color: var(--muted); font-style: italic; margin: 6px 0 0; }
+
+.howto { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 14px 16px; margin-bottom: 18px; display: grid; gap: 10px; }
+.howto p { margin: 0; max-width: 70ch; }
+
+/* nav */
+.nav { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); border-bottom: 1px solid var(--line); margin-inline: -16px; padding: 8px 16px; display: flex; gap: 6px; overflow-x: auto; }
+.nav a { flex: none; font-size: 13px; font-weight: 500; color: var(--muted); text-decoration: none; padding: 5px 11px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); }
+.nav a:hover, .nav a:focus-visible { color: var(--ink); border-color: var(--accent-line); outline: none; }
+.nav a:focus-visible { outline: 2px solid var(--accent-line); outline-offset: 2px; }
+
+/* headings */
+h2 { font-family: var(--font-display); font-weight: 700; font-size: 2rem; letter-spacing: 0.03em; text-transform: uppercase; margin: 44px 0 14px; padding-bottom: 6px; border-bottom: 2px solid var(--accent-line); scroll-margin-top: 64px; text-wrap: balance; }
+h3 { font-family: var(--font-display); font-weight: 600; font-size: 1.35rem; letter-spacing: 0.04em; color: var(--accent); margin: 30px 0 10px; text-wrap: balance; }
+p { margin: 0 0 12px; max-width: 75ch; }
+.note { color: var(--muted); font-size: 13px; }
+
+code { font-family: var(--font-mono); font-size: 0.86em; background: var(--code-bg); color: var(--code-ink); padding: 1px 6px; border-radius: 4px; }
+
+/* lists */
+ul.plain, ol.plain { margin: 0 0 12px; padding-left: 22px; max-width: 75ch; }
+ul.plain li, ol.plain li { margin-bottom: 7px; padding-left: 4px; }
+
+/* tables */
+.tbl { overflow-x: auto; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); margin-bottom: 14px; }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th { background: var(--head); color: var(--head-ink); font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; text-align: left; padding: 10px 12px; white-space: nowrap; }
+td { padding: 10px 12px; border-top: 1px solid var(--line); vertical-align: top; }
+tbody tr:nth-child(even) td { background: var(--stripe); }
+td.ch { white-space: nowrap; font-weight: 500; }
+td.num { color: var(--muted); font-variant-numeric: tabular-nums; width: 1%; }
+td.role { font-weight: 600; white-space: nowrap; }
+td.who { color: var(--muted); }
+.t-purpose { min-width: 260px; }
+
+/* assumption tags */
+.tag-a { display: inline-block; font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent); background: var(--accent-bg); border: 1px solid var(--accent-line); border-radius: 4px; padding: 0 6px; }
+
+/* access matrix */
+.matrix th, .matrix td { text-align: center; }
+.matrix th:first-child, .matrix td:first-child { text-align: left; font-weight: 600; white-space: nowrap; }
+.matrix td { vertical-align: middle; padding-block: 9px; }
+.matrix td.txt { font-family: var(--font-mono); font-size: 11px; color: var(--muted); line-height: 1.35; }
+.matrix td sup { color: var(--muted); font-size: 11px; margin-left: 2px; }
+
+.ic { display: inline-block; position: relative; vertical-align: middle; flex: none; }
+.ic.post { width: 20px; height: 20px; border-radius: 50%; background: var(--post); }
+.ic.post::after { content: ""; position: absolute; left: 7px; top: 3px; width: 5px; height: 10px; border: solid #fff; border-width: 0 2px 2px 0; transform: rotate(45deg); }
+.ic.read { width: 24px; height: 15px; border: 2px solid var(--read); border-radius: 50%; }
+.ic.read::after { content: ""; position: absolute; left: 50%; top: 50%; width: 6px; height: 6px; margin: -3px 0 0 -3px; border-radius: 50%; background: var(--read); }
+.ic.btn { width: 24px; height: 15px; border-radius: 4px; background: var(--btn); }
+.ic.btn::after { content: ""; position: absolute; left: 5px; right: 5px; top: 6px; height: 3px; border-radius: 2px; background: rgba(255, 255, 255, 0.85); }
+.ic.hide { width: 14px; height: 3px; border-radius: 2px; background: var(--hide); }
+
+.legend { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px 22px; }
+.legend li { display: flex; align-items: center; gap: 8px; font-size: 14px; }
+
+/* flows */
+.arr { color: var(--accent); font-weight: 600; padding-inline: 2px; }
+
+@media (max-width: 560px) {
+  body { font-size: 14.5px; }
+  h2 { font-size: 1.7rem; }
+}
+</style>
+
+<div class="page">
+
+<header class="hero">
+  <h1>Dark Crown League</h1>
+  <p class="sub">Discord server layout &middot; Season 0</p>
+  <p class="tag">Earn the Crown. Rule the Dungeon.</p>
+</header>
+
+<div class="howto">
+  <p><strong>How to read this:</strong> a tag like <span class="tag-a">A1</span> marks an assumption I made. All of them are listed in section 9 so you can confirm or change them. Channel and role names are shown without emoji icons; add your own in Discord if you like.</p>
+  <ul class="legend" aria-label="Access table legend">
+    <li><i class="ic post"></i> Read and post</li>
+    <li><i class="ic read"></i> Read only</li>
+    <li><i class="ic btn"></i> Read plus buttons/commands only (can't type)</li>
+    <li><i class="ic hide"></i> Hidden</li>
+  </ul>
+</div>
+
+<nav class="nav" aria-label="Sections">
+  <a href="#settings">1 Settings</a>
+  <a href="#roles">2 Roles</a>
+  <a href="#access">3 Access</a>
+  <a href="#channels">4 Channels</a>
+  <a href="#bot-channels">5 Bot channels</a>
+  <a href="#flows">6 Flows</a>
+  <a href="#bot">7 Bot</a>
+  <a href="#setup">8 Setup order</a>
+  <a href="#assumptions">9 Assumptions</a>
+</nav>
+
+<!-- 1 -->
+<h2 id="settings">1. Server settings</h2>
+<ul class="plain">
+  <li>Turn on <strong>Community</strong> (needed for announcement channels and rules screening).</li>
+  <li>Verification level: <strong>Medium</strong> or <strong>High</strong>. Explicit media filter: <strong>all members</strong>.</li>
+  <li><strong>Default notifications: only @mentions.</strong></li>
+  <li>Safety Setup: require <strong>2FA for moderator actions</strong> (your account needs 2FA on first).</li>
+  <li>Don't make "Unverified" the thing that locks channels. Let <strong>@everyone</strong> see only Information and Verification, and hide everything else from @everyone and show it to <strong>Verified Player</strong>. The Unverified role is then just a label the bot adds on join, and nothing depends on it until the bot exists.</li>
+</ul>
+
+<!-- 2 -->
+<h2 id="roles">2. Roles</h2>
+<p class="note">Order matches Discord's role list, top to bottom.</p>
+<div class="tbl"><table>
+  <thead><tr><th>#</th><th>Role</th><th>What it's for</th><th>Key permissions</th></tr></thead>
+  <tbody>
+    <tr><td class="num">1</td><td class="role">Founder &amp; Original Creator</td><td>You</td><td>Administrator</td></tr>
+    <tr><td class="num">2</td><td class="role">Co-Creator</td><td>Founding team</td><td>Everything staff has, but <strong>not</strong> the Administrator flag <span class="tag-a">A1</span></td></tr>
+    <tr><td class="num">3</td><td class="role">DCL Bot</td><td>The bot (placed above every role it hands out)</td><td>Manage Roles, Manage Channels, Manage Threads, Send Messages, Embed Links, Attach Files, Read History, Move Members, Connect</td></tr>
+    <tr><td class="num">4</td><td class="role">Administrator</td><td>Server, systems, config</td><td>Manage Server/Channels/Roles, Ban, Kick, Timeout, Manage Messages, View Audit Log <span class="tag-a">A1</span></td></tr>
+    <tr><td class="num">5</td><td class="role">Moderator</td><td>Reports, rules, disputes</td><td>Timeout, Kick, Manage Messages, Manage Threads, Move/Mute Members. <strong>Permanent bans need Admin+ sign-off</strong> <span class="tag-a">A2</span></td></tr>
+    <tr><td class="num">6</td><td class="role">Gatekeeper</td><td>Can let people into the server, nothing else</td><td>Sees only <code>#verification-queue</code>; no mod powers <span class="tag-a">A3</span></td></tr>
+    <tr><td class="num">7</td><td class="role">Middleman</td><td>Holds and confirms Arena stakes</td><td>Sees Arena middleman channels and <code>#middleman-log</code>. <strong>Only Admin+ can grant it</strong> <span class="tag-a">A12</span></td></tr>
+    <tr><td class="num">8</td><td class="role">Season 0 Player</td><td>Badge for Season 0 members</td><td>Cosmetic only; permissions use Verified <span class="tag-a">A5</span></td></tr>
+    <tr><td class="num">9</td><td class="role">Verified Player</td><td>Standard member</td><td>Access to all player categories</td></tr>
+    <tr><td class="num">10</td><td class="role">Suspended</td><td>Temporary DCL suspension, bot-timed</td><td>Sees only <code>#appeals</code>; removed automatically when time is up <span class="tag-a">A6</span></td></tr>
+    <tr><td class="num">11</td><td class="role">Unverified Player</td><td>New member label</td><td>Information and Verification only</td></tr>
+    <tr><td class="num">12</td><td class="role">Class roles (optional)</td><td>Barbarian, Bard, Cleric, Fighter, Ranger, Rogue, Warlock, Wizard, and any newer classes</td><td>Cosmetic, used for LFG <span class="tag-a">A10</span></td></tr>
+  </tbody>
+</table></div>
+<p><strong>Who can vouch</strong> in Season 0: Founder, Co-Creator, Administrator, Moderator, Gatekeeper <span class="tag-a">A4</span>.</p>
+<p><strong>On "do we need ban/mute roles?":</strong> mutes and kicks use Discord's timeout and kick. Permanent bans use Discord bans. The one extra role I'd add is <strong>Suspended</strong>, because Discord has no built-in timer for temp bans, and a role lets the bot time it and still let the person appeal.</p>
+
+<!-- 3 -->
+<h2 id="access">3. Access by category</h2>
+<ul class="legend" aria-label="Access table legend" style="margin-bottom:14px">
+  <li><i class="ic post"></i> Read and post</li>
+  <li><i class="ic read"></i> Read only</li>
+  <li><i class="ic btn"></i> Buttons only: can see it and press the bot's buttons, can't type</li>
+  <li><i class="ic hide"></i> Hidden</li>
+</ul>
+<div class="tbl"><table class="matrix">
+  <thead><tr><th>Category</th><th>Unverified</th><th>Suspended</th><th>Verified</th><th>Middleman</th><th>Gatekeeper</th><th>Mod</th><th>Admin+</th></tr></thead>
+  <tbody>
+    <tr><td>1. Information</td><td><i class="ic read" title="Read only"></i></td><td><i class="ic read" title="Read only"></i></td><td><i class="ic read" title="Read only"></i></td><td><i class="ic read" title="Read only"></i></td><td><i class="ic read" title="Read only"></i></td><td><i class="ic read" title="Read only"></i></td><td><i class="ic post" title="Read and post"></i></td></tr>
+    <tr><td>2. Verification</td><td><i class="ic btn" title="Buttons only"></i></td><td><i class="ic hide" title="Hidden"></i></td><td><i class="ic hide" title="Hidden"></i></td><td><i class="ic hide" title="Hidden"></i></td><td><i class="ic post" title="Read and post"></i></td><td><i class="ic post" title="Read and post"></i></td><td><i class="ic post" title="Read and post"></i></td></tr>
+    <tr><td>3. Community</td><td><i class="ic hide" title="Hidden"></i></td><td><i class="ic hide" title="Hidden"></i></td><td><i class="ic post" title="Read and post"></i></td><td><i class="ic post" title="Read and post"></i></td><td><i class="ic post" title="Read and post"></i></td><td><i class="ic post" title="Read and post"></i></td><td><i class="ic post" title="Read and post"></i></td></tr>
+    <tr><td>4. Ranked</td><td><i class="ic hide" title="Hidden"></i></td><td><i class="ic hide" title="Hidden"></i></td><td><i class="ic btn" title="Buttons only"></i></td><td><i class="ic btn" title="Buttons only"></i></td><td><i class="ic btn" title="Buttons only"></i></td><td><i class="ic btn" title="Buttons only"></i></td><td><i class="ic post" title="Read and post"></i></td></tr>
+    <tr><td>5. Lobbies</td><td><i class="ic hide" title="Hidden"></i></td><td><i class="ic hide" title="Hidden"></i></td><td><i class="ic btn" title="Buttons only"></i><sup>*</sup></td><td><i class="ic btn" title="Buttons only"></i><sup>*</sup></td><td><i class="ic btn" title="Buttons only"></i><sup>*</sup></td><td><i class="ic post" title="Read and post"></i></td><td><i class="ic post" title="Read and post"></i></td></tr>
+    <tr><td>6. Matches</td><td><i class="ic hide" title="Hidden"></i></td><td><i class="ic hide" title="Hidden"></i></td><td><i class="ic btn" title="Buttons only"></i></td><td><i class="ic btn" title="Buttons only"></i></td><td><i class="ic btn" title="Buttons only"></i></td><td><i class="ic post" title="Read and post"></i></td><td><i class="ic post" title="Read and post"></i></td></tr>
+    <tr><td>7. Leaderboard</td><td><i class="ic hide" title="Hidden"></i></td><td><i class="ic hide" title="Hidden"></i></td><td><i class="ic btn" title="Buttons only"></i></td><td><i class="ic btn" title="Buttons only"></i></td><td><i class="ic btn" title="Buttons only"></i></td><td><i class="ic post" title="Read and post"></i></td><td><i class="ic post" title="Read and post"></i></td></tr>
+    <tr><td>8. Teams</td><td><i class="ic hide" title="Hidden"></i></td><td><i class="ic hide" title="Hidden"></i></td><td><i class="ic post" title="Read and post"></i></td><td><i class="ic post" title="Read and post"></i></td><td><i class="ic post" title="Read and post"></i></td><td><i class="ic post" title="Read and post"></i></td><td><i class="ic post" title="Read and post"></i></td></tr>
+    <tr><td>9. Arena</td><td><i class="ic hide" title="Hidden"></i></td><td><i class="ic hide" title="Hidden"></i></td><td><i class="ic btn" title="Buttons only"></i></td><td><i class="ic post" title="Read and post"></i></td><td><i class="ic btn" title="Buttons only"></i></td><td><i class="ic post" title="Read and post"></i></td><td><i class="ic post" title="Read and post"></i></td></tr>
+    <tr><td>10. Reports</td><td><i class="ic hide" title="Hidden"></i></td><td><i class="ic hide" title="Hidden"></i></td><td><i class="ic btn" title="Buttons only"></i></td><td><i class="ic btn" title="Buttons only"></i></td><td><i class="ic btn" title="Buttons only"></i></td><td><i class="ic post" title="Read and post"></i></td><td><i class="ic post" title="Read and post"></i></td></tr>
+    <tr><td>11. Voice</td><td><i class="ic hide" title="Hidden"></i></td><td><i class="ic hide" title="Hidden"></i></td><td><i class="ic post" title="Read and post"></i><sup>**</sup></td><td><i class="ic post" title="Read and post"></i></td><td><i class="ic post" title="Read and post"></i></td><td><i class="ic post" title="Read and post"></i></td><td><i class="ic post" title="Read and post"></i></td></tr>
+    <tr><td>12. Support</td><td><i class="ic hide" title="Hidden"></i></td><td class="txt">appeals only</td><td><i class="ic btn" title="Buttons only"></i></td><td><i class="ic btn" title="Buttons only"></i></td><td><i class="ic btn" title="Buttons only"></i></td><td><i class="ic post" title="Read and post"></i></td><td><i class="ic post" title="Read and post"></i></td></tr>
+    <tr><td>13. Staff</td><td><i class="ic hide" title="Hidden"></i></td><td><i class="ic hide" title="Hidden"></i></td><td><i class="ic hide" title="Hidden"></i></td><td class="txt">#middleman-log only</td><td class="txt">#verification-queue only</td><td><i class="ic post" title="Read and post"></i></td><td><i class="ic post" title="Read and post"></i></td></tr>
+  </tbody>
+</table></div>
+<p class="note">* Players only see the lobby thread for the lobby they joined. &nbsp; ** Team rooms are visible only to that team's 3 players (plus staff).</p>
+<p>Set permissions on the <strong>category</strong>, then sync each channel to it. It saves a lot of clicking.</p>
+
+<!-- 4 -->
+<h2 id="channels">4. Categories and channels</h2>
+
+<h3>1. DCL | INFORMATION</h3>
+<div class="tbl"><table>
+  <thead><tr><th>Channel</th><th>Purpose</th><th>Who posts</th></tr></thead>
+  <tbody>
+    <tr><td class="ch"><code>#welcome</code></td><td class="t-purpose">What DCL is, how to start, verification info, links</td><td class="who">Staff</td></tr>
+    <tr><td class="ch"><code>#announcements</code></td><td class="t-purpose">Seasons, rule changes, match announcements, maintenance</td><td class="who">Staff only</td></tr>
+    <tr><td class="ch"><code>#rules</code></td><td class="t-purpose">Code of Conduct, gameplay rules (including Trap Farming), integrity rules, reporting rules, penalties</td><td class="who">Staff</td></tr>
+    <tr><td class="ch"><code>#how-dcl-works</code></td><td class="t-purpose">Ranked, Arena, rating, leaderboard, teams, reports, seasons</td><td class="who">Staff</td></tr>
+    <tr><td class="ch"><code>#faq</code></td><td class="t-purpose">Verify, find a team, gear needed, rating, Arena, reporting, what happens if you don't report</td><td class="who">Staff</td></tr>
+    <tr><td class="ch"><code>#season-schedule</code></td><td class="t-purpose">Current season dates, wipe timeline, match nights. Seasons last about a month; DCL starts a month after a wipe, and a wipe lasts three months</td><td class="who">Staff</td></tr>
+  </tbody>
+</table></div>
+
+<h3>2. DCL | VERIFICATION</h3>
+<div class="tbl"><table>
+  <thead><tr><th>Channel</th><th>Purpose</th><th>Who posts</th></tr></thead>
+  <tbody>
+    <tr><td class="ch"><code>#verify</code></td><td class="t-purpose">The <strong>[ VERIFY ACCOUNT ]</strong> button. It opens a private thread (player, voucher, Gatekeepers/Mods) where the player posts a screenshot of <strong>all in-game characters and the account name</strong></td><td class="who">Bot, plus the player inside their own thread</td></tr>
+    <tr><td class="ch"><code>#verify-help</code></td><td class="t-purpose">Questions from unverified players</td><td class="who">Unverified, staff</td></tr>
+  </tbody>
+</table></div>
+
+<h3>3. DCL | COMMUNITY</h3>
+<div class="tbl"><table>
+  <thead><tr><th>Channel</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td class="ch"><code>#general</code></td><td class="t-purpose">Main chat</td></tr>
+    <tr><td class="ch"><code>#clips-highlights</code></td><td class="t-purpose">Voluntary highlight clips (separate from dispute clips)</td></tr>
+    <tr><td class="ch"><code>#feedback</code></td><td class="t-purpose">Season 0 feedback, one thread per topic</td></tr>
+    <tr><td class="ch"><code>#bot-commands</code></td><td class="t-purpose">Where <code>/elo</code>, <code>/leaderboard</code> etc. get used so other channels stay clean</td></tr>
+  </tbody>
+</table></div>
+
+<h3>4. DCL | RANKED</h3>
+<div class="tbl"><table>
+  <thead><tr><th>Channel</th><th>Purpose</th><th>Who posts</th></tr></thead>
+  <tbody>
+    <tr><td class="ch"><code>#ranked-info</code></td><td class="t-purpose">Entry requirements, team size, gear, rating, format, result reporting, penalties</td><td class="who">Staff</td></tr>
+    <tr><td class="ch"><code>#ranked-queue</code></td><td class="t-purpose">Bot message showing teams/players/status and the <strong>[ JOIN LOBBY ]</strong> button</td><td class="who">Bot only</td></tr>
+  </tbody>
+</table></div>
+
+<h3>5. DCL | LOBBIES</h3>
+<div class="tbl"><table>
+  <thead><tr><th>Channel</th><th>Purpose</th><th>Who posts</th></tr></thead>
+  <tbody>
+    <tr><td class="ch"><code>#active-lobbies</code></td><td class="t-purpose">The bot posts one card per lobby (4-6 teams / 12-18 players), shows its status, and opens a <strong>thread per lobby</strong> with the Lobby Leader, <strong>[ START MATCH VOTE ]</strong> (2/3 of lobby players), and the Match ID</td><td class="who">Bot only, plus players in their own lobby thread</td></tr>
+  </tbody>
+</table></div>
+<p>When a lobby fills (6 teams), starts by vote, or hits the max wait time, the bot locks the thread after the match starts <span class="tag-a">A8</span>.</p>
+
+<h3>6. DCL | MATCHES</h3>
+<div class="tbl"><table>
+  <thead><tr><th>Channel</th><th>Purpose</th><th>Who posts</th></tr></thead>
+  <tbody>
+    <tr><td class="ch"><code>#live-matches</code></td><td class="t-purpose">"DCL RANKED MATCH #024 &mdash; Teams 6/6 &mdash; MATCH STARTED"</td><td class="who">Bot only</td></tr>
+    <tr><td class="ch"><code>#submit-results</code></td><td class="t-purpose"><strong>[ SUBMIT RESULTS ]</strong>: placement, kills, screenshot after leaving the match. Every player reports their own</td><td class="who">Bot form</td></tr>
+    <tr><td class="ch"><code>#match-results</code></td><td class="t-purpose">Verified results and updated ratings (this is also your match history)</td><td class="who">Bot only</td></tr>
+  </tbody>
+</table></div>
+<p>Each team has a <strong>Clipper</strong> who records the match and keeps the VOD. It is uploaded only when a result is disputed <span class="tag-a">A7</span>.</p>
+
+<h3>7. DCL | LEADERBOARD</h3>
+<div class="tbl"><table>
+  <thead><tr><th>Channel</th><th>Purpose</th><th>Who posts</th></tr></thead>
+  <tbody>
+    <tr><td class="ch"><code>#leaderboard</code></td><td class="t-purpose">Auto-updating board with <strong>[ TEAM ]</strong> and <strong>[ INDIVIDUAL ]</strong> buttons to sort. Shows rank, rating, matches, kills, top placements</td><td class="who">Bot only</td></tr>
+    <tr><td class="ch"><code>#player-stats</code></td><td class="t-purpose">Player profile card (rating, rank, matches, kills, best placement)</td><td class="who">Bot only</td></tr>
+    <tr><td class="ch"><code>#season-archive</code></td><td class="t-purpose">Past seasons' final standings (create it at the end of Season 0)</td><td class="who">Bot/staff</td></tr>
+  </tbody>
+</table></div>
+
+<h3>8. DCL | TEAMS</h3>
+<div class="tbl"><table>
+  <thead><tr><th>Channel</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td class="ch"><code>#team-registration</code></td><td class="t-purpose"><strong>[ REGISTER TEAM ]</strong>: team name + 3 players. A roster change creates a new team and the old one stays in the database</td></tr>
+    <tr><td class="ch"><code>#team-registry</code></td><td class="t-purpose">Bot-posted list of registered teams (read-only)</td></tr>
+    <tr><td class="ch"><code>#looking-for-team</code></td><td class="t-purpose">LFT posts, e.g. "LFT &mdash; Wizard &mdash; 2500 Rating &mdash; Legendary+"</td></tr>
+    <tr><td class="ch"><code>#looking-for-player</code></td><td class="t-purpose">LFP posts, e.g. "LFP &mdash; 2/3 &mdash; Looking for Wizard &mdash; 2500+"</td></tr>
+  </tbody>
+</table></div>
+<p>LFT/LFP posts go through a bot form so they look consistent and auto-expire after 24 hours <span class="tag-a">A9</span>.</p>
+
+<h3>9. DCL | ARENA (launches with Ranked in Season 0)</h3>
+<div class="tbl"><table>
+  <thead><tr><th>Channel</th><th>Purpose</th><th>Who posts</th></tr></thead>
+  <tbody>
+    <tr><td class="ch"><code>#arena-info</code></td><td class="t-purpose">BO3, entry stake, no gear loss, direct competition, winner takes the prize</td><td class="who">Staff</td></tr>
+    <tr><td class="ch"><code>#arena-queue</code></td><td class="t-purpose">Open matches, available opponents, <strong>[ JOIN ARENA ]</strong></td><td class="who">Bot only</td></tr>
+    <tr><td class="ch"><code>#middleman-requests</code></td><td class="t-purpose"><strong>[ REQUEST MIDDLEMAN ]</strong> opens a private thread with both sides and a Middleman</td><td class="who">Bot, plus the thread participants</td></tr>
+    <tr><td class="ch"><code>#arena-results</code></td><td class="t-purpose">"ARENA MATCH #018 &mdash; Team A vs Team B &mdash; 2-1 &mdash; Winner"</td><td class="who">Bot only</td></tr>
+  </tbody>
+</table></div>
+
+<h3>10. DCL | REPORTS</h3>
+<div class="tbl"><table>
+  <thead><tr><th>Channel</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td class="ch"><code>#report-player</code></td><td class="t-purpose"><strong>[ REPORT PLAYER ]</strong>. Categories: Cheating, Stream Sniping, Match Manipulation, Teaming, Kill Farming, Trap Farming, Exploit/Bug Abuse, Gameplay Abuse, Griefing, Toxicity/Harassment, Other. Fields: clip, VOD, screenshot, timestamp, description. Goes straight to the staff area</td></tr>
+  </tbody>
+</table></div>
+
+<h3>11. DCL | VOICE</h3>
+<div class="tbl"><table>
+  <thead><tr><th>Channel</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td class="ch">Hangout 1 / Hangout 2</td><td class="t-purpose">General chat</td></tr>
+    <tr><td class="ch">LFG &mdash; Find a Team</td><td class="t-purpose">Players looking for teammates</td></tr>
+    <tr><td class="ch">Match Waiting Room</td><td class="t-purpose">For players who have joined a lobby</td></tr>
+    <tr><td class="ch">Team rooms</td><td class="t-purpose"><strong>Bot-created</strong> private voice channel per team per match (3 players + staff), deleted afterwards. Keeps teams from overhearing each other</td></tr>
+    <tr><td class="ch">Arena Waiting</td><td class="t-purpose">For Arena queue</td></tr>
+    <tr><td class="ch">Middleman Room</td><td class="t-purpose">Temporary room created per middleman request</td></tr>
+  </tbody>
+</table></div>
+
+<h3>12. DCL | SUPPORT</h3>
+<div class="tbl"><table>
+  <thead><tr><th>Channel</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td class="ch"><code>#support</code></td><td class="t-purpose"><strong>[ OPEN TICKET ]</strong> makes a private thread with staff</td></tr>
+    <tr><td class="ch"><code>#appeals</code></td><td class="t-purpose">Visible to Suspended players so they can appeal <span class="tag-a">A11</span></td></tr>
+  </tbody>
+</table></div>
+
+<h3>13. DCL | STAFF (hidden from everyone but staff)</h3>
+<div class="tbl"><table>
+  <thead><tr><th>Channel</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td class="ch"><code>#staff-chat</code></td><td class="t-purpose">General staff talk</td></tr>
+    <tr><td class="ch"><code>#verification-queue</code></td><td class="t-purpose">Pending verifications with vouch info and <strong>[ APPROVE ]</strong> / <strong>[ DENY ]</strong> (Gatekeepers see only this one)</td></tr>
+    <tr><td class="ch"><code>#result-review</code></td><td class="t-purpose">Pending result reports, screenshots, clips, approve/reject</td></tr>
+    <tr><td class="ch"><code>#match-disputes</code></td><td class="t-purpose">Conflicting reports or no-report cases</td></tr>
+    <tr><td class="ch"><code>#mod-reports</code></td><td class="t-purpose">Incoming reports. Buttons: <strong>REVIEW &middot; WARNING &middot; RATING PENALTY &middot; TEMPORARY BAN &middot; PERMANENT BAN</strong></td></tr>
+    <tr><td class="ch"><code>#mod-log</code></td><td class="t-purpose">Every action taken: who, what, why</td></tr>
+    <tr><td class="ch"><code>#rating-adjustments</code></td><td class="t-purpose">Every manual rating change, with a reason</td></tr>
+    <tr><td class="ch"><code>#appeals-review</code></td><td class="t-purpose">Staff discussion on appeals</td></tr>
+    <tr><td class="ch"><code>#middleman-log</code></td><td class="t-purpose">Middlemen record each completed stake (Middlemen + Admin+)</td></tr>
+    <tr><td class="ch"><code>#staff-commands</code></td><td class="t-purpose">Where staff slash commands are used</td></tr>
+    <tr><td class="ch"><code>#bot-log</code></td><td class="t-purpose">Bot errors and audit trail</td></tr>
+    <tr><td class="ch"><code>#season-admin</code></td><td class="t-purpose">Season rollovers and formula changes (Admin+ only)</td></tr>
+    <tr><td class="ch">Staff VC</td><td class="t-purpose">Staff voice</td></tr>
+    <tr><td class="ch">Dispute Room</td><td class="t-purpose">Temporary voice for talking with players during a dispute</td></tr>
+  </tbody>
+</table></div>
+
+<!-- 5 -->
+<h2 id="bot-channels">5. Bot-controlled channels</h2>
+<p>Players can't type in these, they only use buttons and forms: <code>#verify</code>, <code>#ranked-queue</code>, <code>#active-lobbies</code> (except their own thread), <code>#live-matches</code>, <code>#submit-results</code>, <code>#match-results</code>, <code>#leaderboard</code>, <code>#player-stats</code>, <code>#team-registry</code>, <code>#arena-queue</code>, <code>#arena-results</code>, <code>#report-player</code>.</p>
+
+<!-- 6 -->
+<h2 id="flows">6. Main flows</h2>
+<div class="tbl"><table>
+  <thead><tr><th>Flow</th><th>Steps</th></tr></thead>
+  <tbody>
+    <tr><td class="role">Verification (Season 0)</td><td class="t-purpose">Join <span class="arr">&rarr;</span> Unverified <span class="arr">&rarr;</span> <strong>[ VERIFY ACCOUNT ]</strong> <span class="arr">&rarr;</span> private thread <span class="arr">&rarr;</span> screenshot of all characters + account name, and name of the vouching member <span class="arr">&rarr;</span> Gatekeeper/Mod approves in <code>#verification-queue</code> <span class="arr">&rarr;</span> Verified + Season 0 Player</td></tr>
+    <tr><td class="role">Ranked match</td><td class="t-purpose">Team registered <span class="arr">&rarr;</span> <strong>[ JOIN LOBBY ]</strong> <span class="arr">&rarr;</span> lobby thread (Lobby Leader, Match ID e.g. DCL-MATCH-024) <span class="arr">&rarr;</span> vote or auto-start (6 teams, or max wait) <span class="arr">&rarr;</span> bot creates team voice channels <span class="arr">&rarr;</span> match played via custom matchmaking <span class="arr">&rarr;</span> each player submits placement, kills and screenshot <span class="arr">&rarr;</span> staff verify <span class="arr">&rarr;</span> rating updated <span class="arr">&rarr;</span> posted in <code>#match-results</code></td></tr>
+    <tr><td class="role">No report</td><td class="t-purpose">Maximum rating penalty applied to that player only. A staff override (for example a proven crash or disconnect with a clip) is optional and always logged in <code>#rating-adjustments</code></td></tr>
+    <tr><td class="role">Report a player</td><td class="t-purpose"><strong>[ REPORT PLAYER ]</strong> <span class="arr">&rarr;</span> <code>#mod-reports</code> <span class="arr">&rarr;</span> Review <span class="arr">&rarr;</span> Decision. A report never results in automatic punishment</td></tr>
+    <tr><td class="role">Arena</td><td class="t-purpose"><strong>[ JOIN ARENA ]</strong> <span class="arr">&rarr;</span> opponents matched <span class="arr">&rarr;</span> <strong>[ REQUEST MIDDLEMAN ]</strong> to hold stakes <span class="arr">&rarr;</span> BO3 <span class="arr">&rarr;</span> result logged in <code>#arena-results</code> and <code>#middleman-log</code></td></tr>
+  </tbody>
+</table></div>
+
+<!-- 7 -->
+<h2 id="bot">7. What the bot will need to do</h2>
+<p class="note">Preview for the next phase.</p>
+<ul class="plain">
+  <li><strong>Buttons/forms:</strong> Verify Account, Register Team, Join Lobby, Start Match Vote, Submit Results, Join Arena, Request Middleman, Report Player, Open Ticket, leaderboard sort (Team/Individual), staff action buttons.</li>
+  <li><strong>Commands:</strong> <code>/elo</code>, <code>/profile</code>, <code>/leaderboard</code>, staff-only <code>/rating-adjust</code>, <code>/suspend</code>, <code>/season</code>.</li>
+  <li><strong>Database:</strong> players, teams (rosters, active/retired), seasons, matches, per-player results, ratings (team and individual, per season), reports/cases, penalties, Arena matches.</li>
+  <li><strong>Rating model:</strong> rating is driven by placement and <strong>team kills</strong> only, never personal kills (healers don't kill). Team rating belongs to a registered roster. Individual rating belongs to the player, gaining or losing the same change as whatever team they played in, and carries across every roster they play with. Personal kills are still recorded and shown on profiles as stats.</li>
+  <li><strong>Config file:</strong> rating formula, lobby max wait, vote threshold, penalty size, so none of it is hard-coded.</li>
+</ul>
+
+<!-- 8 -->
+<h2 id="setup">8. Setup order</h2>
+<ol class="plain">
+  <li>Create the roles in the order in section 2.</li>
+  <li>Turn on Community and the section 1 settings.</li>
+  <li>Create the 13 categories and set permissions on each category using the section 3 table.</li>
+  <li>Create the channels inside them (sync permissions to the category).</li>
+  <li>Post placeholder text in the bot channels ("Coming soon") so they aren't empty.</li>
+  <li>Test with a spare account: first as Unverified, then as Verified.</li>
+  <li>Write the text for <code>#welcome</code>, <code>#rules</code>, <code>#how-dcl-works</code>, <code>#faq</code>.</li>
+  <li>Build the bot (next phase).</li>
+</ol>
+
+<!-- 9 -->
+<h2 id="assumptions">9. Assumptions to confirm</h2>
+<div class="tbl"><table>
+  <thead><tr><th>Tag</th><th>Assumption</th></tr></thead>
+  <tbody>
+    <tr><td><span class="tag-a">A1</span></td><td class="t-purpose">Only the Founder has Discord's Administrator flag. Co-Creator and Administrator get the individual permissions they need.</td></tr>
+    <tr><td><span class="tag-a">A2</span></td><td class="t-purpose">Moderators can warn, timeout, suspend and apply rating penalties. Permanent bans need Admin+ sign-off.</td></tr>
+    <tr><td><span class="tag-a">A3</span></td><td class="t-purpose">Gatekeeper is a verify-only role (the "just lets people in" role you described).</td></tr>
+    <tr><td><span class="tag-a">A4</span></td><td class="t-purpose">Vouchers: Founder, Co-Creator, Administrator, Moderator, Gatekeeper.</td></tr>
+    <tr><td><span class="tag-a">A5</span></td><td class="t-purpose">Season 0 Player is a badge; Verified Player is what unlocks channels. In Season 1 the badge stays as a founders' mark.</td></tr>
+    <tr><td><span class="tag-a">A6</span></td><td class="t-purpose">Temp suspensions use the Suspended role (bot-timed). Permanent bans use a normal Discord ban.</td></tr>
+    <tr><td><span class="tag-a">A7</span></td><td class="t-purpose">Each team names one Clipper who records the match and keeps the VOD for 7 days; it's only uploaded for disputes.</td></tr>
+    <tr><td><span class="tag-a">A8</span></td><td class="t-purpose">Lobby max wait time: 30 minutes, then it starts with the available eligible teams (configurable).</td></tr>
+    <tr><td><span class="tag-a">A9</span></td><td class="t-purpose">LFT/LFP posts use a bot form and auto-expire after 24 hours.</td></tr>
+    <tr><td><span class="tag-a">A10</span></td><td class="t-purpose">Class roles are optional and cosmetic. Check the list against the current in-game classes.</td></tr>
+    <tr><td><span class="tag-a">A11</span></td><td class="t-purpose">Permanently banned players can't see <code>#appeals</code>, so you need an outside route (a form or email) for them.</td></tr>
+    <tr><td><span class="tag-a">A12</span></td><td class="t-purpose">Only Admin+ can hand out the Middleman role, and you keep the number small, since middlemen hold other people's stakes.</td></tr>
+  </tbody>
+</table></div>
+
+</div>
+
+</body></html>
